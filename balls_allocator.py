@@ -2,88 +2,105 @@
 import numpy as np
 
 class Bins:
-    def __init__(self, m=2):
+    def __init__(self, m=2, seed=42):
         assert m>=1
         self.m = m
-        self.array = [0 for _ in range(self.m)]
+        self.array = np.zeros(self.m, dtype=int)
         self.__n_acum = 0
         self.n = None
+        self.d = None
         self.beta = None
+        self.rng = np.random.default_rng(seed)
+
+    def choose_d(self, d=1):
+        return self.rng.integers(0, self.m, d)
     
-    def simulate_random_1(self):
-        pos = np.random.randint(0, self.m)
-        self.array[pos] +=1
+    def mask(self, idxs):
+        """make a numpy array of False for positions in idxs and True for the rest"""
+        mask = np.ones(self.m, dtype=bool)
+        mask[idxs] = False
+        return mask
+    
+    def argmin(self, mask):
+        """argmin of a numpy array after applying a mask"""
+        masked_values = np.where(mask, np.inf, self.array)
+        # masked_array = np.ma.array(self.array, mask=~mask)
+        return np.argmin(masked_values)
+    
 
-    def simulate_random_2(self):
-        pos1 = np.random.randint(0, self.m)
-        pos2 = np.random.randint(0, self.m)
-        if self.array[pos1] < self.array[pos2]:
-            self.array[pos1] += 1
-        else:
-            ### as we draw pos1 and pos2 randomly do we need to make another random in case of tie or is this enough?
-            self.array[pos2] += 1
+    def simulate_random(self):
+        b = (self.rng.random() < self.beta)
+        d_choice = self.d if b else 1
+        idxs = self.choose_d(d=d_choice)
+        mask = self.mask(idxs=idxs)
+        minimum_idx = self.argmin(mask=mask)
+        self.array[minimum_idx] += 1
+        
 
-    def simulate_random_beta(self):
-        b = (np.random.random() < self.beta)
-        if b:
-            self.simulate_random_2()
-        else:
-            self.simulate_random_1()
-
-    def simulate_n_random_1(self):
+    def simulate_n_random(self):
         for _ in range(self.n):
-            self.simulate_random_1()
-
-    def simulate_n_random_2(self):
-        for _ in range(self.n):
-            self.simulate_random_2()
-
-    def simulate_n_random_beta(self):
-        for _ in range(self.n):
-            self.simulate_random_beta()
+            self.simulate_random()
             
 
-    def simulate(self, method="one-choice", n=10, beta=0.05):
+    def simulate(self, d=1, n=10, beta=0.05):
         assert beta<=1
         assert beta>=0
+        assert d>=1
+        assert n>=1
 
+        self.d = d
         self.n = n
         self.beta = beta
-        if method == "one-choice":
-            self.simulate_n_random_1()
-        elif method == "two-choice":
-            self.simulate_n_random_2()
-        elif method == "beta-choice":
-            self.simulate_n_random_beta()
-        else:
-            print("kheeeeeeeeeee")
-            # raise Exception
+        self.simulate_n_random()
         self.__n_acum += n
 
     
     def maximum_load(self):
-        return max(self.array)
+        return np.max(self.array)
     
     def gap(self):
-        return self.maximum_load - (self.__n_acum/self.m)
+        return self.maximum_load() - (self.__n_acum/self.m)
     
     def gap_new(self):
-        return self.maximum_load - (self.n/self.m)
+        return self.maximum_load() - (self.n/self.m)
     
     def reset(self, new_m=None):
         if new_m:
             self.m = new_m
-        self.array = [0 for _ in range(self.m)]
+        self.array = np.zeros(self.m, dtype=int)
         self.__n_acum = 0
         self.n = None
+        self.d = None
         self.beta = None
+
+    # def __call__(self, *args, **kwargs):
+    #     """Allow instance to be called directly to run simulate()"""
+    #     return self.simulate(*args, **kwargs)
+
+    def __repr__(self):
+        return f"Bins(m={self.m}, array={self.array}, n_acum={self.__n_acum})"
+    
+    def __str__(self):
+        return f"{self.array}"
     
 
 if __name__ == "__main__":
 
-    ### TODO: do it with numpy
+    # TODO: BATCH (only see load before adding from batch)
+    #  only partial information about the loads
+    # __call__ method
+    # experiments (another file + rename this to bins.py)
+
+    # This file is meant to be imported and used
+    # the following lines of code are for testing purposes
+
 
     bins = Bins(m=15)
-    bins.simulate(method="beta-choice", n=10000, beta=0.5)
-    print(bins.array)
-    print(bins.maximum_load())
+    # bins.simulate(d=1, n=10000, beta=0.0)  # one-choice //// rn any d works f.i. bins.simulate(d=888, n=10000, beta=0.0)
+    # bins.simulate(d=2, n=10000, beta=1.0)  # two-choice
+    bins.simulate(d=2, n=10000, beta=0.5)  # beta-choice rn between 1 and 2
+    # bins.simulate(d=10, n=10000, beta=0.5)
+    # bins.simulate(d=10, n=10000, beta=1.0)
+    print(bins)
+    print(bins.maximum_load(), bins.gap())
+
