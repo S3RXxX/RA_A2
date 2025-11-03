@@ -10,6 +10,7 @@ class Bins:
         self.n = None
         self.d = None
         self.beta = None
+        self.b_size=None
         self.rng = np.random.default_rng(seed)
 
     def choose_d(self, d=1):
@@ -29,28 +30,46 @@ class Bins:
     
 
     def simulate_random(self):
-        b = (self.rng.random() < self.beta)
-        d_choice = self.d if b else 1
-        idxs = self.choose_d(d=d_choice)
-        mask = self.mask(idxs=idxs)
-        minimum_idx = self.argmin(mask=mask)
-        self.array[minimum_idx] += 1
+        """simulate a batch of size self.b_size (single ball for ==1)"""
+        aux_array=np.zeros(self.m, dtype=int)
+        for _ in range(self.b_size):
+            b = (self.rng.random() < self.beta)
+            d_choice = self.d if b else 1
+            idxs = self.choose_d(d=d_choice)
+            mask = self.mask(idxs=idxs)
+            minimum_idx = self.argmin(mask=mask)
+            aux_array[minimum_idx] += 1
+        return aux_array
         
 
     def simulate_n_random(self):
-        for _ in range(self.n):
-            self.simulate_random()
+        """
+        simulate all n balls by batches
+        if n//b is not integer, then last batch is smaller
+        """
+        full_batch_iterations = self.n//self.b_size
+        lose_balls = self.n%self.b_size
+        for _ in range(full_batch_iterations):
+            self.array+=self.simulate_random()
+
+        if lose_balls:
+            b_size=self.b_size
+            self.b_size=lose_balls
+            self.array+=self.simulate_random()
+            self.b_size=b_size
             
 
-    def simulate(self, d=1, n=10, beta=0.05):
+    def simulate(self, d=1, n=10, beta=0.05, b_size=1):
         assert beta<=1
         assert beta>=0
         assert d>=1
         assert n>=1
+        assert b_size>=1
 
         self.d = d
         self.n = n
         self.beta = beta
+        self.b_size = b_size
         self.simulate_n_random()
         self.__n_acum += n
 
@@ -72,6 +91,7 @@ class Bins:
         self.n = None
         self.d = None
         self.beta = None
+        self.b_size=None
 
     # def __call__(self, *args, **kwargs):
     #     """Allow instance to be called directly to run simulate()"""
