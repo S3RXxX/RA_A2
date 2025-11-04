@@ -74,47 +74,59 @@ class Bins:
         self.simulate_n_random()
         self.__n_acum += n
 
+    def le_value(self, idxs, value):
+        # idxs_below_value = []
+        # for idx in idxs:
+        #     if self.array[idx] < value:
+        #         idxs_below_value.append(idx)
+
+        mask = self.mask(idxs=idxs)
+        masked_values = np.where(mask, np.inf, self.array)
+        mask_below_value = masked_values <= value
+        idxs_below_value_np = np.where(mask_below_value)[0]
+        # print(sorted(list(set(idxs_below_value))))
+        # print(idxs_below_value_np)
+        # print(sorted(list(set(idxs_below_value)))==idxs_below_value_np)
+        # print()
+        # assert all(sorted(list(set(idxs_below_value)))==idxs_below_value_np)
+
+        return idxs_below_value_np
 
     def simulate_random_uncertainty(self):
         """simulate a batch of size self.b_size with uncertainty queries (single ball for ==1)"""
         aux_array=np.zeros(self.m, dtype=int)
+        m = np.median(self.array)
+        q25 = np.percentile(self.array, 25)  # better outside if big batch sizes
+        q75 = np.percentile(self.array, 75)
+
         for _ in range(self.b_size):
-            b = (self.rng.random() < self.beta)  # use for num_questions = 2 if b else 1
+            b = (self.rng.random() < self.beta)  # use for k = 2 if b else 1
             idxs = self.choose_d(d=self.d)
+            idxs_below_median = self.le_value(idxs=idxs, value=m)
+            num_below_median = len(idxs_below_median)
 
-            m = np.median(self.array)
-            num_below_median = np.sum(self.array[idxs]<m)
             if num_below_median==1:
-                # mask to retrieve idx
-                minimum_idx = 0
-            elif num_below_median>2:
+                minimum_idx = idxs_below_median[0]
+            elif num_below_median>1:
                 if b:
-                    q25 = np.percentile(self.array, 25)
-                    num_below_q25 = np.sum(self.array[idxs]<q25)
-                    # select one from the ones below q25 or random from below median (need mask both cases)
-                    if num_below_q25==0:
-                        pass
+                    
+                    idxs_below_q25 = self.le_value(idxs=idxs_below_median, value=q25)
+                    if len(idxs_below_q25)==0:
+                        minimum_idx = self.rng.choice(idxs_below_median)
                     else:
-                        pass
-
+                        minimum_idx = self.rng.choice(idxs_below_q25)
                 else:
-                    # choose random from the ones below median
-                    # need mask to retrieve idx
-                    minimum_idx = 0
-                    pass
+                    minimum_idx = self.rng.choice(idxs_below_median)
             elif num_below_median==0:
                 if b: 
-                    q75 = np.percentile(self.array, 75)
-                    num_below_q75 = np.sum(self.array[idxs]<q75)
-                    # select one from the ones below the 75 or random
-                    if num_below_q75==0:
+                    
+                    idxs_below_q75 = self.le_value(idxs=idxs, value=q75)
+                    if len(idxs_below_q75)==0:
                         minimum_idx = self.rng.choice(idxs)
                     else:
-                        pass
+                        minimum_idx = self.rng.choice(idxs_below_q75)
                 else:
                     minimum_idx = self.rng.choice(idxs)
-                
-            
             
             aux_array[minimum_idx] += 1
         return aux_array
@@ -197,7 +209,7 @@ if __name__ == "__main__":
     # the following lines of code are for testing purposes
 
 
-    bins = Bins(m=15)
+    bins = Bins(m=1000)
     # bins.simulate(d=1, n=10000, beta=0.0)  # one-choice //// rn any d works f.i. bins.simulate(d=888, n=10000, beta=0.0)
     # bins.simulate(d=2, n=10000, beta=1.0)  # two-choice
     # bins.simulate(d=2, n=10000, beta=0.5)  # beta-choice rn between 1 and 2
@@ -206,8 +218,15 @@ if __name__ == "__main__":
 
     # bins.simulate(d=1, n=10000, beta=0.0, b_size=1000)
     # bins.simulate(d=2, n=10000, beta=0.5, b_size=70)
+    # bins.simulate(d=2, n=10000000, beta=0.5, b_size=70)
 
-    bins.simulate_uncertainty(d=2, n=10000, beta=1, b_size=1)
+    # bins.simulate_uncertainty(d=2, n=10000, beta=0, b_size=1)
+    # bins.simulate_uncertainty(d=2, n=10000, beta=1, b_size=1)
+
+    # bins.simulate_uncertainty(d=1000, n=10000, beta=0, b_size=1)
+    # bins.simulate_uncertainty(d=1000, n=10000, beta=0.6, b_size=1)
+    bins.simulate_uncertainty(d=1000, n=10000, beta=1, b_size=1)
+    # bins.simulate_uncertainty(d=6, n=10000, beta=0, b_size=1)
     print(bins)
     print(bins.maximum_load(), bins.gap())
     # print(np.sum(bins.array))
