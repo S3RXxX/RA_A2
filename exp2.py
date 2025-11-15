@@ -23,7 +23,7 @@ if __name__=="__main__":
     b_batches = [1]
     ms = [100]
     for m in ms:
-        ns = [m//4,m//2] + [x for x in range(m, m*m + 1, max(m//2,1))]
+        ns = [max(m//4, 1),max(m//2,1)] + [x for x in range(m, m*m + 1, max(m//2,1))]
         for n in ns:
             for beta in betas:
                 for d in ds:
