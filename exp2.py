@@ -18,8 +18,8 @@ if __name__=="__main__":
 
     # compare d=1,2 and some betas
     ### d experiment ###
-    betas = [x/100 for x in range(10, 101, 25)]
-    ds = [x for x in range(2, 10, 2)]
+    betas = [x/100 for x in range(0, 101, 25)]
+    ds = [1] + [x for x in range(2, 10, 2)]
     b_batches = [1]
     ms = [100]
     for m in ms:
