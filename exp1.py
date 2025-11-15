@@ -20,7 +20,7 @@ if __name__=="__main__":
     ####### Standard experiment ########
     ####################################
     # compare d=1,2 and some betas
-    betas = [x/10 for x in range(0, 101, 25)] # b == 0 -> d=1 b== 1 -> d=2
+    betas = [x/100 for x in range(0, 101, 25)] # b == 0 -> d=1 b== 1 -> d=2
     ds = [2]
     b_batches = [1]
     ms = [2,5,10,30,50,100]

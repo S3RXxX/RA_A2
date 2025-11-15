@@ -22,7 +22,7 @@ if __name__=="__main__":
     # consider: b = m, b = 2m, . . . , b = 10m, . . . , b = 70m, . . . 
     # (and hence n = b, n = 2b, n = 3b, . . . ,n = m**2 = λ · b, with λ = m2/b).
 
-    betas = [x/10 for x in range(0, 101, 25)]
+    betas = [x/100 for x in range(0, 101, 25)]
     ds = [2]
     
     ms = [30]
