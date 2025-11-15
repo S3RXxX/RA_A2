@@ -19,7 +19,7 @@ if __name__=="__main__":
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
         df_d = df_group[df_group["d"] == d_value]
-        for m_value in sorted(df_group["m"].unique()):
+        for m_value in sorted(df_d["m"].unique()):
             df_m = df_d[df_d["m"] == m_value]
 
             plt.figure()  # one separate plot
