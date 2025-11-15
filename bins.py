@@ -1,18 +1,22 @@
 # import scipy
 import numpy as np
+import time
 
 class Bins:
     def __init__(self, m=2, seed=42):
         assert m>=1
         self.m = m
         self.array = np.zeros(self.m, dtype=int)
+        # self.__aux_array = np.zeros(self.m, dtype=int)  # auxiliary array for batch purposes
         self.__n_acum = 0
         self.n = None
         self.d = None
         self.beta = None
         self.b_size=None
         # self.k = None
+        self.__seed=seed
         self.rng = np.random.default_rng(seed)
+        
 
     def choose_d(self, d=1):
         return self.rng.integers(0, self.m, d)
@@ -178,8 +182,10 @@ class Bins:
         if new_m:
             self.m = new_m
         if seed:
+            self.__seed=seed
             self.rng = np.random.default_rng(seed)
         self.array = np.zeros(self.m, dtype=int)
+        # self.__aux_array = np.zeros(self.m, dtype=int)
         self.__n_acum = 0
         self.n = None
         self.d = None
@@ -192,42 +198,88 @@ class Bins:
     #     return self.simulate(*args, **kwargs)
 
     def __repr__(self):
-        return f"Bins(m={self.m}, array={self.array}, n_acum={self.__n_acum})"
+        return f"Bins(m={self.m}, n_acum={self.__n_acum}, d={self.d}, beta={self.beta}, b_size={self.b_size}, seed={self.__seed})"
     
     def __str__(self):
         return f"{self.array}"
     
 
-if __name__ == "__main__":
+def time_it(func, *args, **kwargs):
+    start = time.perf_counter()
+    result = func(*args, **kwargs)
+    end = time.perf_counter()
+    return result, end - start
 
-    # TODO: BATCH (only see load before adding from batch)
-    #  only partial information about the loads
-    # __call__ method
-    # experiments (another file + rename this to bins.py)
+if __name__ == "__main__":
 
     # This file is meant to be imported and used
     # the following lines of code are for testing purposes
 
+    seed = 42
+    bins = Bins(m=1000, seed=seed)
 
-    bins = Bins(m=1000)
-    # bins.simulate(d=1, n=10000, beta=0.0)  # one-choice //// rn any d works f.i. bins.simulate(d=888, n=10000, beta=0.0)
-    # bins.simulate(d=2, n=10000, beta=1.0)  # two-choice
-    # bins.simulate(d=2, n=10000, beta=0.5)  # beta-choice rn between 1 and 2
-    # bins.simulate(d=10, n=10000, beta=0.5)
-    # bins.simulate(d=10, n=10000, beta=1.0)
+    # --- Standard simulate() tests ---
+    ( _, t ) = time_it(bins.simulate, d=1, n=10000, beta=0.0)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
 
-    # bins.simulate(d=1, n=10000, beta=0.0, b_size=1000)
-    # bins.simulate(d=2, n=10000, beta=0.5, b_size=70)
-    # bins.simulate(d=2, n=10000000, beta=0.5, b_size=70)
+    ( _, t ) = time_it(bins.simulate, d=2, n=10000, beta=1.0)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
 
-    # bins.simulate_uncertainty(d=2, n=10000, beta=0, b_size=1)
-    # bins.simulate_uncertainty(d=2, n=10000, beta=1, b_size=1)
+    ( _, t ) = time_it(bins.simulate, d=2, n=10000, beta=0.5)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
 
-    # bins.simulate_uncertainty(d=1000, n=10000, beta=0, b_size=1)
-    # bins.simulate_uncertainty(d=1000, n=10000, beta=0.6, b_size=1)
-    bins.simulate_uncertainty(d=1000, n=10000, beta=1, b_size=1)
-    # bins.simulate_uncertainty(d=6, n=10000, beta=0, b_size=1)
-    print(bins)
-    print(bins.maximum_load(), bins.gap())
+    ( _, t ) = time_it(bins.simulate, d=10, n=10000, beta=0.5)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+    ( _, t ) = time_it(bins.simulate, d=10, n=10000, beta=1.0)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+    ( _, t ) = time_it(bins.simulate, d=1, n=10000, beta=0.0, b_size=1000)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+    ( _, t ) = time_it(bins.simulate, d=2, n=10000, beta=0.5, b_size=70)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+    ( _, t ) = time_it(bins.simulate, d=2, n=100000, beta=0.5, b_size=70)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+
+    # --- Uncertainty tests ---
+    ( _, t ) = time_it(bins.simulate_uncertainty, d=2, n=10000, beta=0, b_size=1)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+    ( _, t ) = time_it(bins.simulate_uncertainty, d=2, n=10000, beta=1, b_size=1)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+    ( _, t ) = time_it(bins.simulate_uncertainty, d=1000, n=10000, beta=0, b_size=1)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+    ( _, t ) = time_it(bins.simulate_uncertainty, d=1000, n=10000, beta=0.6, b_size=1)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+    ( _, t ) = time_it(bins.simulate_uncertainty, d=1000, n=10000, beta=1, b_size=1)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+    ( _, t ) = time_it(bins.simulate_uncertainty, d=6, n=10000, beta=0, b_size=1)
+    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    bins.reset(seed=seed)
+
+    
+    
+    # print(bins)
+    # print(bins.maximum_load(), bins.gap())
     # print(np.sum(bins.array))
 
