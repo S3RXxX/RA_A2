@@ -4,13 +4,8 @@ import os
 
 if __name__=="__main__":
     df = pd.read_csv("exp2.csv")
-    df2 = pd.read_csv("exp2_d1.csv")
-    print(df2)
+
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
-    df2 = df2.loc[:, ~df2.columns.str.contains('^Unnamed')]
-    print(df)
-    df = pd.concat([df, df2], ignore_index=True)
-    print(df)
 
     group_cols = [c for c in df.columns if c not in ['seed', 'gap']]
     df_group = df.groupby(group_cols, as_index=False)['gap'].mean()
