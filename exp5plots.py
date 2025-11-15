@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 if __name__=="__main__":
-    df = pd.read_csv("exp4.csv")
+    df = pd.read_csv("exp5.csv")
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
     group_cols = [c for c in df.columns if c not in ['seed', 'gap']]
@@ -20,7 +20,7 @@ if __name__=="__main__":
             plt.plot(
                 df_beta["n"],
                 df_beta["gap"],
-                label=f"k = {beta_value+1}"
+                label=f"beta = {beta_value}"
             )
 
         plt.axvline(

@@ -25,7 +25,7 @@ if __name__=="__main__":
         plt.plot(
             df_beta["n"],
             df_beta["gap"],
-            label=f"Uncertainty beta = {beta_value}",
+            label=f"Uncertainty k = {beta_value+1}",
             )
     plt.plot(
         df_db["n"],
