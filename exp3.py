@@ -25,7 +25,7 @@ if __name__=="__main__":
     betas = [x/100 for x in range(0, 101, 25)]
     ds = [2]
     
-    ms = [30]
+    ms = [100]
     for m in ms:
         ns = [m//4,m//2] + [x for x in range(m, m*m + 1, max(m//2,1))]
         for n in ns:
@@ -47,4 +47,4 @@ if __name__=="__main__":
     df_args["gap"] = gaps_list
 
     df = df_args
-    df.to_csv("exp3.csv")
+    df.to_csv("exp3_m100.csv")
