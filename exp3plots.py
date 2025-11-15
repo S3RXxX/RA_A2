@@ -3,7 +3,7 @@ import pandas as pd
 import os
 
 if __name__=="__main__":
-    df = pd.read_csv("exp3_m100.csv")
+    df = pd.read_csv("exp3.csv")
 
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
