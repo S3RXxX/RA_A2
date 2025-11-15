@@ -42,7 +42,7 @@ class Bins:
             d_choice = self.d if b else 1
             idxs = self.choose_d(d=d_choice)
             mask = self.mask(idxs=idxs)
-            minimum_idx = self.argmin(mask=mask)
+            minimum_idx = self.argmin(mask=mask) #If tie, we choose the first
             aux_array[minimum_idx] += 1
         return aux_array
         
