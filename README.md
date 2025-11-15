@@ -1,5 +1,5 @@
 # Randomized Algorithms (RA-MIRI): Assignment #2
-Do it by:
+Done by:
     - Sergi Guimerà Roig
     - Iván Sánchez Gala
 
