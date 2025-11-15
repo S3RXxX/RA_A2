@@ -34,7 +34,7 @@ if __name__=="__main__":
 
             plt.xlabel("n")
             plt.ylabel("gap")
-            plt.title(f"m = {m_value} k = {beta_value}")
+            plt.title(f"m = {m_value} k = {beta_value+1}")
             plt.legend()
             plt.tight_layout()
             plt.savefig(f"./exp5/m{m_value}_beta{beta_value}")
