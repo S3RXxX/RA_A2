@@ -7,7 +7,6 @@ if __name__=="__main__":
 
     group_cols = [c for c in df.columns if c not in ['seed', 'gap']]
     df_group = df.groupby(group_cols, as_index=False)['gap'].mean()
-    print(df_group)
 
     for m_value in sorted(df_group["m"].unique()):
         df_m = df_group[df_group["m"] == m_value]
