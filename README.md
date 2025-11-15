@@ -4,7 +4,7 @@ Done by:
     - Iván Sánchez Gala
 
 # Project Structure
-    -***.pdf:** Task statement.
+- ***.pdf:** Task statement.
     -**bins.py:** Code where class Bins is created and it contains all asked and auxiliar functions.
     -**exp$.py:** Experimentation changing values of Bins.
     -**exp$plots.py:** Code to generate plots from the experimentation.
