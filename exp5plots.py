@@ -17,23 +17,25 @@ if __name__=="__main__":
         for beta_value in sorted(df_m["beta"].unique()):
             df_beta = df_m[df_m["beta"] == beta_value]
 
-            plt.plot(
-                df_beta["n"],
-                df_beta["gap"],
-                label=f"beta = {beta_value}"
-            )
+            for d_value in sorted(df_beta["d"].unique()):
+                df_d = df_beta[df_beta["d"] == d_value]
+                plt.plot(
+                    df_d["n"],
+                    df_d["gap"],
+                    label=f"d = {d_value}"
+                )
 
-        plt.axvline(
-        x=m_value,
-        linestyle="--",
-        linewidth=1.5,
-        label="light-load"
-    )
+            plt.axvline(
+            x=m_value,
+            linestyle="--",
+            linewidth=1.5,
+            label="light-load"
+        )
 
-        plt.xlabel("n")
-        plt.ylabel("gap")
-        plt.title(f"m = {m_value}")
-        plt.legend()
-        plt.tight_layout()
-        plt.savefig(f"./exp4/m{m_value}")
-        plt.show()
+            plt.xlabel("n")
+            plt.ylabel("gap")
+            plt.title(f"m = {m_value} k = {beta_value}")
+            plt.legend()
+            plt.tight_layout()
+            plt.savefig(f"./exp5/m{m_value}_beta{beta_value}")
+            plt.show()
