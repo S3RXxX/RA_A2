@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
+import math
 
 if __name__=="__main__":
     df = pd.read_csv("exp2.csv")
@@ -16,10 +17,8 @@ if __name__=="__main__":
         df_d = df_group[df_group["d"] == d_value]
         for m_value in sorted(df_d["m"].unique()):
             df_m = df_d[df_d["m"] == m_value]
-
-            plt.figure()  # one separate plot
-
-            # One color per beta → matplotlib will auto-assign colors
+            plt.figure()
+            
             for beta_value in sorted(df_m["beta"].unique()):
                 df_beta = df_m[df_m["beta"] == beta_value]
 
