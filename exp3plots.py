@@ -11,6 +11,10 @@ if __name__=="__main__":
     df_group = df.groupby(group_cols, as_index=False)['gap'].mean()
     for batch_value in sorted(df_group["b_batch"].unique()):
         df_batch = df_group[df_group["b_batch"] == batch_value]
+        if batch_value>=1000:
+            print(df_batch)
+            print(df_batch.describe())
+            exit()
         plt.figure()
         for beta_value in sorted(df_batch["beta"].unique()):
             df_beta = df_batch[df_batch["beta"] == beta_value]

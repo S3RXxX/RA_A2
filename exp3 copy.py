@@ -24,18 +24,18 @@ if __name__=="__main__":
 
     betas = [x/100 for x in range(0, 101, 25)]
     ds = [2]
-    m=100
-    b_batches = [x for x in range(1, m*m+2, m)]
+    
     ms = [100]
     for m in ms:
         ns = [m//4,m//2] + [x for x in range(m, m*m + 1, max(m//2,1))]
         for n in ns:
-            
+            b_batches = [x for x in range(1, n + 1, m)]
             for beta in betas:
                 for d in ds:
                     for b_batch in b_batches:
                         for seed in seeds:
                             tasks.append((m, n, beta, d, b_batch, seed))
+
     with Pool() as p:
         results = p.map(worker, tasks)
 

@@ -216,65 +216,11 @@ if __name__ == "__main__":
     # the following lines of code are for testing purposes
 
     seed = 42
-    bins = Bins(m=1000, seed=seed)
+    bins = Bins(m=100, seed=seed)
 
     # --- Standard simulate() tests ---
-    ( _, t ) = time_it(bins.simulate, d=1, n=10000, beta=0.0)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate, d=2, n=10000, beta=1.0)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate, d=2, n=10000, beta=0.5)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate, d=10, n=10000, beta=0.5)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate, d=10, n=10000, beta=1.0)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate, d=1, n=10000, beta=0.0, b_size=1000)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate, d=2, n=10000, beta=0.5, b_size=70)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate, d=2, n=100000, beta=0.5, b_size=70)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-
-    # --- Uncertainty tests ---
-    ( _, t ) = time_it(bins.simulate_uncertainty, d=2, n=10000, beta=0, b_size=1)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate_uncertainty, d=2, n=10000, beta=1, b_size=1)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate_uncertainty, d=1000, n=10000, beta=0, b_size=1)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate_uncertainty, d=1000, n=10000, beta=0.6, b_size=1)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate_uncertainty, d=1000, n=10000, beta=1, b_size=1)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
-    bins.reset(seed=seed)
-
-    ( _, t ) = time_it(bins.simulate_uncertainty, d=6, n=10000, beta=0, b_size=1)
-    print("time:", t, repr(bins), bins.maximum_load(), bins.gap())
+    ( _, t ) = time_it(bins.simulate, d=1, n=100, beta=0.0, b_size=50)
+    print("gap", bins.gap())
     bins.reset(seed=seed)
 
     
