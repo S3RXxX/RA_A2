@@ -9,7 +9,7 @@ if __name__=="__main__":
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
 
-    df = pd.read_csv("exp3.csv")
+    df = pd.read_csv("exp3_m100.csv")
 
     df = df.loc[:, ~df.columns.str.contains('^Unnamed')]
 
