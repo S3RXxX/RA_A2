@@ -22,6 +22,9 @@ Code executed with python 3.12.4
 
 # Env
 python3 -m venv env
+
 Linux/Macos -> source env/bin/activate
+
 Windows -> .\env\Scripts\Activate
+
 pip install -r requirements.txt
