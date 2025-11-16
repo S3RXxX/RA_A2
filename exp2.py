@@ -35,10 +35,9 @@ if __name__=="__main__":
         results = p.map(worker, tasks)
 
     args_list, gaps_list = zip(*results)
-    # Convertir args en un DataFrame
+
     df_args = pd.DataFrame(args_list, columns=["m", "n", "beta", "d", "b_batch", "seed"])
 
-    # Añadir los gaps
     df_args["gap"] = gaps_list
 
     df = df_args

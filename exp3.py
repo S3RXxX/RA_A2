@@ -12,8 +12,6 @@ seeds = [42, 67, 77, 69, 13, 28430, 44015, 42699, 57975, 32146]
 T = len(seeds)
 
 if __name__=="__main__":
-    # n should go from low to n/m to n=m**2
-    # 
     tasks = []
 
     ####################################
@@ -40,10 +38,9 @@ if __name__=="__main__":
         results = p.map(worker, tasks)
 
     args_list, gaps_list = zip(*results)
-    # Convertir args en un DataFrame
+    
     df_args = pd.DataFrame(args_list, columns=["m", "n", "beta", "d", "b_batch", "seed"])
 
-    # Añadir los gaps
     df_args["gap"] = gaps_list
 
     df = df_args

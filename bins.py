@@ -7,13 +7,11 @@ class Bins:
         assert m>=1
         self.m = m
         self.array = np.zeros(self.m, dtype=int)
-        # self.__aux_array = np.zeros(self.m, dtype=int)  # auxiliary array for batch purposes
         self.__n_acum = 0
         self.n = None
         self.d = None
         self.beta = None
         self.b_size=None
-        # self.k = None
         self.__seed=seed
         self.rng = np.random.default_rng(seed)
         
@@ -26,12 +24,6 @@ class Bins:
         mask = np.ones(self.m, dtype=bool)
         mask[idxs] = False
         return mask
-    
-    # def argmin(self, mask):
-    #     """argmin of a numpy array after applying a mask"""
-    #     masked_values = np.where(mask, np.inf, self.array)
-    #     # masked_array = np.ma.array(self.array, mask=~mask)
-    #     return np.argmin(masked_values)
     
     def argmin(self, mask):
         """Return a random argmin of self.array under a mask."""
@@ -87,20 +79,11 @@ class Bins:
         self.__n_acum += n
 
     def le_value(self, idxs, value):
-        # idxs_below_value = []
-        # for idx in idxs:
-        #     if self.array[idx] < value:
-        #         idxs_below_value.append(idx)
 
         mask = self.mask(idxs=idxs)
         masked_values = np.where(mask, np.inf, self.array)
         mask_below_value = masked_values <= value
         idxs_below_value_np = np.where(mask_below_value)[0]
-        # print(sorted(list(set(idxs_below_value))))
-        # print(idxs_below_value_np)
-        # print(sorted(list(set(idxs_below_value)))==idxs_below_value_np)
-        # print()
-        # assert all(sorted(list(set(idxs_below_value)))==idxs_below_value_np)
 
         return idxs_below_value_np
 
@@ -193,17 +176,11 @@ class Bins:
             self.__seed=seed
             self.rng = np.random.default_rng(seed)
         self.array = np.zeros(self.m, dtype=int)
-        # self.__aux_array = np.zeros(self.m, dtype=int)
         self.__n_acum = 0
         self.n = None
         self.d = None
         self.beta = None
         self.b_size=None
-        # self.k = None
-
-    # def __call__(self, *args, **kwargs):
-    #     """Allow instance to be called directly to run simulate()"""
-    #     return self.simulate(*args, **kwargs)
 
     def __repr__(self):
         return f"Bins(m={self.m}, n_acum={self.__n_acum}, d={self.d}, beta={self.beta}, b_size={self.b_size}, seed={self.__seed})"
@@ -219,10 +196,6 @@ def time_it(func, *args, **kwargs):
     return result, end - start
 
 if __name__ == "__main__":
-
-    # This file is meant to be imported and used
-    # the following lines of code are for testing purposes
-
     seed = 42
     bins = Bins(m=100, seed=seed)
 

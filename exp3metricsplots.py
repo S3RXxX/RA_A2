@@ -39,6 +39,5 @@ if __name__=="__main__":
         plt.legend()
         plt.tight_layout()
 
-        # Guardamos el gráfico con índice del grupo de batches
         plt.savefig(f"./exp3/metrics/m100_batchSize{batch_value}.png")
         plt.close()

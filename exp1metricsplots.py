@@ -19,9 +19,8 @@ if __name__=="__main__":
     for m_value in sorted(df_group["m"].unique()):
         df_m = df_group[df_group["m"] == m_value]
 
-        plt.figure()  # one separate plot
+        plt.figure()
 
-        # One color per beta → matplotlib will auto-assign colors
         for beta_value in sorted(df_m["beta"].unique()):
             df_beta = df_m[df_m["beta"] == beta_value]
 

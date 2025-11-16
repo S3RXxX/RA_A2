@@ -18,7 +18,7 @@ if __name__=="__main__":
     df_d = df2_group[df2_group["d"] == d_value]
     df_db = df_d[df_d["beta"]==1]
     df_m = df_group[df_group["m"] == m_value]
-    plt.figure()  # one separate plot
+    plt.figure()
 
     for beta_value in sorted(df_m["beta"].unique()):
         df_beta = df_m[df_m["beta"] == beta_value]
