@@ -27,11 +27,19 @@ class Bins:
         mask[idxs] = False
         return mask
     
+    # def argmin(self, mask):
+    #     """argmin of a numpy array after applying a mask"""
+    #     masked_values = np.where(mask, np.inf, self.array)
+    #     # masked_array = np.ma.array(self.array, mask=~mask)
+    #     return np.argmin(masked_values)
+    
     def argmin(self, mask):
-        """argmin of a numpy array after applying a mask"""
+        """Return a random argmin of self.array under a mask."""
         masked_values = np.where(mask, np.inf, self.array)
-        # masked_array = np.ma.array(self.array, mask=~mask)
-        return np.argmin(masked_values)
+        min_val = masked_values.min()
+        candidates = np.flatnonzero(masked_values == min_val)
+        # Choose one uniformly at random from all idx w min val
+        return self.rng.choice(candidates)
     
 
     def simulate_random(self):
@@ -223,7 +231,17 @@ if __name__ == "__main__":
     print("gap", bins.gap())
     bins.reset(seed=seed)
 
-    
+    bins.simulate(n=3000,d=2,beta=1, b_size=1001)
+    print("gap", bins.gap())
+    bins.reset(seed=seed)
+
+    bins.simulate(n=3500,d=2,beta=1, b_size=1001)
+    print("gap", bins.gap())
+    bins.reset(seed=seed)
+
+    bins.simulate(n=4000,d=2,beta=1, b_size=1001)
+    print("gap", bins.gap())
+    bins.reset(seed=seed)
     
     # print(bins)
     # print(bins.maximum_load(), bins.gap())
