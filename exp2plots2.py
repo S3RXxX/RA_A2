@@ -38,5 +38,5 @@ if __name__=="__main__":
             plt.title(f"m = {m_value} for beta = {beta_value}")
             plt.legend()
             plt.tight_layout()
-            plt.savefig(f"./exp2/d_value{d_value}/m{m_value}_beta{beta_value}.png")
+            plt.savefig(f"./exp2/m{m_value}_beta{beta_value}.png")
             plt.show()
