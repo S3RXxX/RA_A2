@@ -45,3 +45,13 @@ or
 **bins.simulate_uncertainty(d=d, n=n, beta=beta, b_size=b_batch) # With uncertainty**
 
 Where d is the number of bins selected at random with replacements to select the bin where the ball will go, n is the number of balls the program will put into the bins, beta is the probability of using the d-choice rule or the probability of choosing the scenario where k=2 when the experiment is with uncertainty, and b_size is the batch size.
+
+To execute the different experiments you need to execute:
+
+python3 exp$.py #$ is the experiment number
+
+To execute the plots:
+
+python3 exp$plots.py # gap plots
+
+python3 exp$metricsplots.py # for the plots regarding the standard deviaton of the gap
