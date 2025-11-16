@@ -13,7 +13,9 @@ Done by:
 - **./exp$:** Folder to save the plots.
 # Requirements
 numpy>=1.26
+
 pandas>=2.2
+
 matplotlib>=3.8
 
 Code executed with python 3.12.4
