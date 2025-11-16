@@ -28,3 +28,18 @@ Linux/Macos -> source env/bin/activate
 Windows -> .\env\Scripts\Activate
 
 pip install -r requirements.txt
+
+# Bins tutorial
+To simulate any experiment the first you need to do is create the object Bins:
+
+Bins(m=m, seed=seed)
+
+Where m is the number of bins and seed is a number to allow replicability.
+
+Finally, to execute the simulation you need to execute:
+
+bins.simulate(d=d, n=n, beta=beta, b_size=b_batch) #Without uncertainty
+
+bins.simulate_uncertainty(d=d, n=n, beta=beta, b_size=b_batch) # With uncertainty
+
+Where d is the number of bins selected at random with replacements to select the bin where the ball will go, n is the number of balls the program will put into the bins, beta is the probability of using the d-choice rule or the probability of choosing the scenario where k=2 when the experiment is with uncertainty, and b_size is the batch size.
